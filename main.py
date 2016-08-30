@@ -15,11 +15,70 @@
 # limitations under the License.
 #
 import webapp2
+import os
+import jinja2
+
+from google.appengine.ext import db
+
+template_dir = os.path.join(os.path.dirname(__file__), "templates")
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir),
+                                autoescape = True)
+
+class Blogpost(db.Model):
+    title = db.StringProperty(required=True)
+    blogpost = db.TextProperty(required=True)
+    created = db.DateTimeProperty(auto_now_add=True)
+
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world!')
+        self.redirect("/blog")
 
+class BlogHandler(webapp2.RequestHandler):
+    def render_front(self, title="", blogpost="", error="", blogposts=""):
+        t = jinja_env.get_template("mainpage.html")
+        blogposts = db.GqlQuery("select * from Blogpost order by created desc LIMIT 5")
+        response = t.render(title=title, blogpost=blogpost, error = error, blogposts = blogposts)
+        self.response.write(response)
+
+    def get(self):
+        self.render_front()
+
+    def post(self):
+        title = self.request.get("title")
+        blogpost = self.request.get("blogpost")
+
+        if title and blogpost:
+            b = Blogpost(title = title, blogpost = blogpost)
+            b.put()
+            self.redirect("/")
+        else:
+            error = "we need both a title and some artwork!"
+            self.render_front(title, art, error)
+
+class newPostHandler(webapp2.RequestHandler):
+    def render_front(self, title="", blogpost="", error="", blogposts=""):
+        t = jinja_env.get_template("newpage.html")
+        blogposts = db.GqlQuery("select * from Blogpost order by created desc LIMIT 5")
+        response = t.render(title=title, blogpost=blogpost, error = error, blogposts = blogposts)
+        self.response.write(response)
+
+    def get(self):
+        self.render_front()
+
+    def post(self):
+        title = self.request.get("title")
+        blogpost = self.request.get("blogpost")
+
+        if title and blogpost:
+            b = Blogpost(title = title, blogpost = blogpost)
+            b.put()
+            self.redirect("/")
+        else:
+            error = "we need both a title and some content!"
+            self.render_front(title, blogpost, error)
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+    ('/', MainHandler),
+    ('/blog', BlogHandler),
+    ('/blog/newpost', newPostHandler)
 ], debug=True)
