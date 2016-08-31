@@ -44,22 +44,22 @@ class BlogHandler(webapp2.RequestHandler):
     def get(self):
         self.render_front()
 
-    def post(self):
-        title = self.request.get("title")
-        blogpost = self.request.get("blogpost")
-
-        if title and blogpost:
-            b = Blogpost(title = title, blogpost = blogpost)
-            b.put()
-            self.redirect("/")
-        else:
-            error = "we need both a title and some artwork!"
-            self.render_front(title, art, error)
+    #def post(self):
+    #    title = self.request.get("title")
+    #    blogpost = self.request.get("blogpost")
+#
+#        if title and blogpost:
+#            b = Blogpost(title = title, blogpost = blogpost)
+#            b.put()
+#            self.redirect("/")
+#        else:
+#            error = "we need both a title and some artwork!"
+#            self.render_front(title, art, error)
 
 class newPostHandler(webapp2.RequestHandler):
     def render_front(self, title="", blogpost="", error="", blogposts=""):
         t = jinja_env.get_template("newpage.html")
-        blogposts = db.GqlQuery("select * from Blogpost order by created desc LIMIT 5")
+        #blogposts = db.GqlQuery("select * from Blogpost order by created desc LIMIT 5")
         response = t.render(title=title, blogpost=blogpost, error = error, blogposts = blogposts)
         self.response.write(response)
 
@@ -73,12 +73,34 @@ class newPostHandler(webapp2.RequestHandler):
         if title and blogpost:
             b = Blogpost(title = title, blogpost = blogpost)
             b.put()
-            self.redirect("/")
+            perm = str(b.key().id())
+            self.redirect("/blog/"+ perm)
+
+    #        post.key().id()
         else:
             error = "we need both a title and some content!"
             self.render_front(title, blogpost, error)
+class ViewPostHandler(webapp2.RequestHandler):
+    def render_front(self, singlepost=""):
+        t = jinja_env.get_template("permalink.html")
+        response = t.render(singlepost=singlepost)
+        self.response.write(response)
+
+    #todo check for error in id # and return error page instead
+
+
+    def get(self, id):
+        id = int(id)
+        singlepost = Blogpost.get_by_id(id)
+        self.render_front(singlepost)
+
+
+#fix redirect from / to /blog
+
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler),
     ('/blog', BlogHandler),
-    ('/blog/newpost', newPostHandler)
+    ('/blog/newpost', newPostHandler),
+    webapp2.Route(r'/blog/<id:\d+>', ViewPostHandler)
 ], debug=True)
