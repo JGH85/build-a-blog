@@ -7,8 +7,20 @@
         {% for blogpost in blogposts %}
         <div class="blogpost">
             <a class = "blog-title" href = "blog/{{blogpost.key().id()}}">{{blogpost.title}}</a>
-            <pre class="blog-body">{{blogpost.blogpost}}</pre>
+            <p class="blog-body">{{blogpost.blogpost}}</p>
         </div>
+        <hr>
+
         {% endfor %}
 
+        
+        <div class = "footer"> <a href="{{prevlink}}">{{prev}}</a> 
+        	<span>{{separator}}</span> 
+        	{%for number in numofpages%}
+        		&nbsp;<a href="blog?page={{number}}">{{number}}</a>
+        	{%endfor%} 
+        	&nbsp;<span>{{separator}}</span> 
+        	<a href="{{nextlink}}">{{next}}</a> </div>
+
+       
 {% endblock %}

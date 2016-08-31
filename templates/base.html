@@ -4,11 +4,12 @@
     <head>
         <style type = "text/css">
             body {
-                font-family: sans-serif;
+                font-family: "Helvetica";
                 width: 800px;
                 margin: 0 auto;
                 padding: 10px;
             }
+
             .error {
                 color:red;
             }
@@ -25,7 +26,6 @@
                 width: 400px;
                 height: 200px;
                 font-size: 17px;
-                font-family: monospace;
             }
             input[type=submit] {
                 font-size: 24px;
@@ -43,13 +43,32 @@
             .blog-body {
                 margin: 0;
                 font-size: 17px;
+                font-family: "New Century Schoolbook";
             }
+            a {
+                text-decoration: none;
+                color:black;
+            }
+            a:hover {
+                color: navy;
+            }
+            span {
+                font-size: 1.5em;
+            }
+
         </style>
         <title> My blog of awesomeness </title>
     </head>
 
     <body>
-        <h1> My blog of awesomeness </h1>
+        <h1> <a href = "/blog">My blog of awesomeness</a> </h1>
+
+        <hr>
+
+        <a href = "/blog"> Home </a> 
+        &nbsp; | &nbsp;
+        <a href = "/blog/newpost"> New Post </a> 
+
 
         {% block content %}
         {% endblock %}
