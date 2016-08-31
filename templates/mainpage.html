@@ -14,12 +14,12 @@
         {% endfor %}
 
         
-        <div class = "footer"> <a href="{{prevlink}}">{{prev}}</a> 
-        	<span>{{separator}}</span> 
+        <div> <a href="{{prevlink}}">{{prev}}</a> 
+        	<span>|</span> 
         	{%for number in numofpages%}
         		&nbsp;<a href="blog?page={{number}}">{{number}}</a>
         	{%endfor%} 
-        	&nbsp;<span>{{separator}}</span> 
+        	&nbsp;<span>|</span> 
         	<a href="{{nextlink}}">{{next}}</a> </div>
 
        

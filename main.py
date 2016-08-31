@@ -46,7 +46,7 @@ class MainHandler(webapp2.RequestHandler):
 
 class BlogHandler(webapp2.RequestHandler):
     def render_front(self, title="", blogpost="", error="", blogposts="", numofpages='',
-                        next='', prev = '', separator='', nextlink='', prevlink=''):
+                        next='', prev = '', nextlink='', prevlink=''):
         t = jinja_env.get_template("mainpage.html")
         #blogposts = db.GqlQuery("select * from Blogpost order by created desc LIMIT 5")
 
@@ -88,15 +88,14 @@ class BlogHandler(webapp2.RequestHandler):
         if pagenum == numofpages:
             LastPageTest = True
 
-        #make both variables blank as appropriate, and create separator
+        #make both variables blank as appropriate
         if FirstPageTest:
             prev = ''
         if LastPageTest:
             next = ''
-        separator = "|"
 
         response = t.render(title=title, blogpost=blogpost, error = error, blogposts = blogposts,
-        numofpages=numofpagesrange, next = next, prev = prev, separator=separator, prevlink = prevlink, nextlink = nextlink)
+        numofpages=numofpagesrange, next = next, prev = prev, prevlink = prevlink, nextlink = nextlink)
         self.response.write(response)
 
     def get(self):
@@ -129,7 +128,7 @@ class newPostHandler(webapp2.RequestHandler):
 
 class ViewPostHandler(webapp2.RequestHandler):
     """handler that writes a single post"""
-    
+
     def render_front(self, singlepost=""):
         t = jinja_env.get_template("permalink.html")
         response = t.render(singlepost=singlepost)
