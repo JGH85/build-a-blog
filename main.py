@@ -132,7 +132,7 @@ class ViewPostHandler(webapp2.RequestHandler):
         #create error message if id doesn't exist:
         if singlepost == None:
             error = "Oops, there's nothing here!"
-        self.render_front(singlepost)
+        self.render_front(singlepost, error)
 
 
 #fix redirect from / to /blog
