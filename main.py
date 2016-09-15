@@ -129,6 +129,7 @@ class ViewPostHandler(webapp2.RequestHandler):
     def get(self, id):
         id = int(id)
         singlepost = Blogpost.get_by_id(id)
+        error = ''
         #create error message if id doesn't exist:
         if singlepost == None:
             error = "Oops, there's nothing here!"
